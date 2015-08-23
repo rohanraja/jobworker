@@ -36,4 +36,6 @@ func ProcessResult(jresult *JobResult) {
 		color.Red("Error: %s", jresult.ErrorMsg)
 	}
 
+	DispatchResult(jresult)
+
 }

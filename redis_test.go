@@ -37,3 +37,12 @@ func TesTFetchingJob(t *testing.T) {
 	color.Cyan(out)
 
 }
+
+func TesTDispatchingResult(t *testing.T) {
+
+	jr := jobworker.JobResult{}
+	jr.BinaryKey = "parsebin"
+
+	jobworker.DispatchResult(&jr)
+
+}

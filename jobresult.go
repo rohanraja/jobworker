@@ -7,7 +7,7 @@ type JobResult struct {
 	ResultStr string
 	Status    int
 	ErrorMsg  string
-	Jobinfo   *JobInfo
+	BinaryKey string
 }
 
 func NewJobResult(jinfo *JobInfo, rstr string, err error) (jr JobResult) {
@@ -22,7 +22,7 @@ func NewJobResult(jinfo *JobInfo, rstr string, err error) (jr JobResult) {
 		rstr,
 		errno,
 		fmt.Sprintf("%v", err),
-		jinfo,
+		jinfo.BinaryKey,
 	}
 
 	return jout
