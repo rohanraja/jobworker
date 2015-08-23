@@ -32,5 +32,8 @@ func ProcessResult(jresult *JobResult) {
 	rate := float64(cnt) / elapsed.Seconds()
 
 	color.Cyan("#%d - Rate: %f jobs/seconds\n", cnt, rate)
+	if jresult.Status != 0 {
+		color.Red("Error: %s", jresult.ErrorMsg)
+	}
 
 }
