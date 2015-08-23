@@ -16,7 +16,11 @@ func (r *JobRequest) ProcessRequest() {
 
 }
 
-func (r *JobRequest) Executor() (string, error) {
+func (r *JobRequest) Executor() (res string, err error) {
 
-	return "", nil
+	binPath := GetBinaryFilePath(r.Jobinfo.BinaryKey)
+
+	res, err = ExecuteBinary(binPath, r.Jobinfo.Args)
+
+	return
 }
