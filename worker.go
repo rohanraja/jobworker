@@ -1,6 +1,6 @@
 package jobworker
 
-func processQueue(queue chan JobRequest, exitSignaler chan bool) {
+func ProcessQueue(queue chan JobRequest, exitSignaler chan int) {
 
 	for {
 
