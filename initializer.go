@@ -1,5 +1,7 @@
 package jobworker
 
+import "time"
+
 func Run() {
 
 	jobRequestQueue := make(chan JobRequest)
@@ -16,5 +18,8 @@ func Run() {
 	}
 
 	go ResultsDispatcher(jobResultQueue, resultDispatcherSignal)
+
+	time.Sleep(200 * time.Second)
+	// SignalPoller()
 
 }

@@ -10,7 +10,7 @@ type JobResult struct {
 	Jobinfo   *JobInfo
 }
 
-func NewJobResult(jinfo *JobInfo, rstr string, err error) (jr *JobResult) {
+func NewJobResult(jinfo *JobInfo, rstr string, err error) (jr JobResult) {
 
 	errno := 0
 	if err != nil {
@@ -25,5 +25,5 @@ func NewJobResult(jinfo *JobInfo, rstr string, err error) (jr *JobResult) {
 		jinfo,
 	}
 
-	return &jout
+	return jout
 }

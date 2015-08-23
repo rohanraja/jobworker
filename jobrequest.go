@@ -3,7 +3,7 @@ package jobworker
 type JobRequest struct {
 	Jobinfo        JobInfo
 	Result         JobResult
-	ResultsChannel JobResultsQueue
+	ResultsChannel chan JobResult
 }
 
 func (r *JobRequest) ProcessRequest() {

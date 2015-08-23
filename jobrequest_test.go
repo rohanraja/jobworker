@@ -32,10 +32,10 @@ func TesTExecutingRequest(t *testing.T) {
 
 }
 
-func TestProcessingRequest(t *testing.T) {
+func TesTProcessingRequest(t *testing.T) {
 
 	j := initReq()
-	resChan := make(jobworker.JobResultsQueue)
+	resChan := make(chan jobworker.JobResult)
 	j.ResultsChannel = resChan
 
 	go j.ProcessRequest()
