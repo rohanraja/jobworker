@@ -23,19 +23,46 @@ func ResultsDispatcher(resultQueue chan JobResult, signaler chan int) {
 }
 
 var cnt int = 0
+var TotalDone int = 0
+var Rate float64
+
+var resultsToDispatch [](*JobResult)
 
 func ProcessResult(jresult *JobResult) {
 
 	cnt += 1
+	TotalDone += 1
 	elapsed := time.Since(stTime)
 
-	rate := float64(cnt) / elapsed.Seconds()
+	Rate = float64(cnt) / elapsed.Seconds()
 
-	color.Cyan("#%d - Rate: %f jobs/seconds\n", cnt, rate)
+	if cnt > 400 {
+		cnt = 1
+		stTime = time.Now()
+		color.Blue("\nResetting Counter")
+	}
+
+	// color.Cyan("#%d - Rate: %f jobs/seconds\n", cnt, Rate)
 	if jresult.Status != 0 {
 		color.Red("Error: %s", jresult.ErrorMsg)
 	}
 
-	DispatchResult(jresult)
+	resultsToDispatch = append(resultsToDispatch, jresult)
 
+	if len(resultsToDispatch) > Config.DispatchBufferSize {
+		DispatchMassResults(resultsToDispatch)
+		resultsToDispatch = [](*JobResult){}
+	}
+
+}
+
+func DispatchMassResults(results [](*JobResult)) {
+
+	color.Red("\nDispatching Mass Results\n")
+
+	for i := 0; i < len(results); i++ {
+
+		DispatchResult(results[i])
+	}
+	color.Green("\nDispatching Done\n")
 }

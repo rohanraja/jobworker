@@ -1,13 +1,13 @@
 package jobworker
 
-import "time"
+var reqprocessExit chan int
 
 func Run() {
 
 	jobRequestQueue := make(chan JobRequest, 1000)
-	jobResultQueue := make(chan JobResult, 5000)
+	jobResultQueue := make(chan JobResult, Config.NumWorkers)
 
-	reqprocessExit := make(chan int)
+	reqprocessExit = make(chan int)
 	jobFetcherSignal := make(chan int)
 	resultDispatcherSignal := make(chan int)
 
@@ -19,7 +19,8 @@ func Run() {
 
 	go ResultsDispatcher(jobResultQueue, resultDispatcherSignal)
 
-	time.Sleep(10000 * time.Second)
+	StartWebServer()
+	// time.Sleep(10000 * time.Second)
 	// SignalPoller()
 
 }

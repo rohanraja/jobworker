@@ -13,8 +13,9 @@ type ConfigInfo struct {
 	FetchPollDelay   time.Duration
 	REDIS_Fetch_HOST string
 
-	Fetch_Binkey string
-	NumFetches   int
+	Fetch_Binkey       string
+	NumFetches         int
+	DispatchBufferSize int
 }
 
 var Redis_fetch *redisutils.RedisConn
@@ -26,11 +27,13 @@ func init() {
 
 	Config.BinaryPath = GetBinaryPath()
 	Config.OS_Prefix = GetOSPrefix()
-	Config.NumWorkers = 40
+	Config.NumWorkers = 60
 	Config.FetchPollDelay = 0 * time.Second
 	Config.REDIS_Fetch_HOST = "localhost:6379"
 	Config.Fetch_Binkey = "bookinfocrawl"
-	Config.NumFetches = 100
+	Config.NumFetches = 1000
+
+	Config.DispatchBufferSize = 1000
 
 	Redis_fetch = redisutils.New(Config.REDIS_Fetch_HOST)
 	Redis_dispatch = redisutils.New(Config.REDIS_Fetch_HOST)

@@ -1,0 +1,22 @@
+<h1> Info Page </h1>
+
+
+<table>
+
+  <tr>
+  <td>Job Processing Rate</td>
+  <td>{{.JobRate}}</td>
+</tr>
+  <tr>
+  <td>Total Jobs Processed</td>
+  <td>{{.TotalDone}}</td>
+</tr>
+
+</table>
+
+<h2> Change Num Workers </h2>
+<form action="/changenum" method="post">
+  NumRedisFetches : <input type="text" name="numworkers" /><br>
+   BinaryKey : <input type="text" name="binkey" /><br>
+<input type="submit" value="Submit">
+</form>

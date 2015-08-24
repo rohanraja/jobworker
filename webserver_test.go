@@ -6,8 +6,7 @@ import (
 	"github.com/rohan1020/jobworker"
 )
 
-func TesTRunningMainLoop(t *testing.T) {
+func TestServing(t *testing.T) {
 
-	jobworker.Run()
-
+	jobworker.StartWebServer()
 }
