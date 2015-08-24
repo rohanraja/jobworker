@@ -18,6 +18,8 @@ type ConfigInfo struct {
 }
 
 var Redis_fetch *redisutils.RedisConn
+var Redis_dispatch *redisutils.RedisConn
+var Redis *redisutils.RedisConn
 var Config ConfigInfo
 
 func init() {
@@ -31,4 +33,6 @@ func init() {
 	Config.NumFetches = 20
 
 	Redis_fetch = redisutils.New(Config.REDIS_Fetch_HOST)
+	Redis_dispatch = redisutils.New(Config.REDIS_Fetch_HOST)
+	Redis = redisutils.New(Config.REDIS_Fetch_HOST)
 }

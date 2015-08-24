@@ -33,6 +33,10 @@ func DispatchResult(jResult *JobResult) (err error) {
 
 	MoveJidToDoneSet(binkey, jid, keyDone)
 
+	if jResult.BinaryKeyNext != "" {
+		EnqueueJob(jResult.BinaryKeyNext, string(js))
+	}
+
 	return nil
 }
 
@@ -42,11 +46,11 @@ func MoveJidToDoneSet(binkey, jid, keydone string) (val string) {
 	key_done := "job:" + binkey + ":" + keydone
 
 	err := retry.Do(func() (err error) {
-		_, err = Redis_fetch.Client.SMove(key_process, key_done, jid).Result()
+		_, err = Redis_dispatch.Client.SMove(key_process, key_done, jid).Result()
 		return
 
 	}, func() {
-		Redis_fetch.InitClient()
+		Redis_dispatch.InitClient()
 	})
 
 	if err != nil {
@@ -61,11 +65,11 @@ func SetJobResult(binkey, jid, resultStr string) (val string) {
 	key := "job:" + binkey + ":" + "results"
 
 	err := retry.Do(func() (err error) {
-		_, err = Redis_fetch.Client.HSet(key, jid, resultStr).Result()
+		_, err = Redis_dispatch.Client.HSet(key, jid, resultStr).Result()
 		return
 
 	}, func() {
-		Redis_fetch.InitClient()
+		Redis_dispatch.InitClient()
 	})
 
 	if err != nil {

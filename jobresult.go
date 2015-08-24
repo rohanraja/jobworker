@@ -3,11 +3,12 @@ package jobworker
 import "fmt"
 
 type JobResult struct {
-	Jobid     string
-	ResultStr string
-	Status    int
-	ErrorMsg  string
-	BinaryKey string
+	Jobid         string
+	ResultStr     string
+	Status        int
+	ErrorMsg      string
+	BinaryKey     string
+	BinaryKeyNext string
 }
 
 func NewJobResult(jinfo *JobInfo, rstr string, err error) (jr JobResult) {
@@ -23,6 +24,7 @@ func NewJobResult(jinfo *JobInfo, rstr string, err error) (jr JobResult) {
 		errno,
 		fmt.Sprintf("%v", err),
 		jinfo.BinaryKey,
+		jinfo.BinaryKey_Next,
 	}
 
 	return jout
