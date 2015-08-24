@@ -27,10 +27,10 @@ func init() {
 	Config.BinaryPath = GetBinaryPath()
 	Config.OS_Prefix = GetOSPrefix()
 	Config.NumWorkers = 40
-	Config.FetchPollDelay = 5 * time.Second
+	Config.FetchPollDelay = 0 * time.Second
 	Config.REDIS_Fetch_HOST = "localhost:6379"
-	Config.Fetch_Binkey = "parsebin"
-	Config.NumFetches = 20
+	Config.Fetch_Binkey = "bookinfocrawl"
+	Config.NumFetches = 100
 
 	Redis_fetch = redisutils.New(Config.REDIS_Fetch_HOST)
 	Redis_dispatch = redisutils.New(Config.REDIS_Fetch_HOST)

@@ -34,7 +34,7 @@ func DispatchResult(jResult *JobResult) (err error) {
 	MoveJidToDoneSet(binkey, jid, keyDone)
 
 	if jResult.BinaryKeyNext != "" {
-		EnqueueJob(jResult.BinaryKeyNext, string(js))
+		EnqueueJob(jResult.BinaryKeyNext, jResult.ResultStr)
 	}
 
 	return nil

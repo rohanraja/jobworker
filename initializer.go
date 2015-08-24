@@ -4,8 +4,8 @@ import "time"
 
 func Run() {
 
-	jobRequestQueue := make(chan JobRequest)
-	jobResultQueue := make(chan JobResult)
+	jobRequestQueue := make(chan JobRequest, 1000)
+	jobResultQueue := make(chan JobResult, 5000)
 
 	reqprocessExit := make(chan int)
 	jobFetcherSignal := make(chan int)
@@ -19,7 +19,7 @@ func Run() {
 
 	go ResultsDispatcher(jobResultQueue, resultDispatcherSignal)
 
-	time.Sleep(200 * time.Second)
+	time.Sleep(10000 * time.Second)
 	// SignalPoller()
 
 }
