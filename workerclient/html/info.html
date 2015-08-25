@@ -4,19 +4,30 @@
 <table>
 
   <tr>
+  <td>Number of Workers</td>
+  <td>{{.NumWorkers}}</td>
+</tr><tr>
   <td>Job Processing Rate</td>
-  <td>{{.JobRate}}</td>
+  <td>{{.JobRate}} jobs/second</td>
 </tr>
   <tr>
   <td>Total Jobs Processed</td>
   <td>{{.TotalDone}}</td>
+</tr>
+  <tr>
+  <td>Fetch_Binary</td>
+  <td>{{.BinKey}}</td>
 </tr>
 
 </table>
 
 <h2> Change Num Workers </h2>
 <form action="/changenum" method="post">
-  NumRedisFetches : <input type="text" name="numworkers" /><br>
-   BinaryKey : <input type="text" name="binkey" /><br>
+  NumWorkers: <input value="{{.NumWorkers}}" type="text" name="numworkers" /><br>
+  BinaryKey : <input value="{{.BinKey}}" type="text" name="binkey" /><br>
 <input type="submit" value="Submit">
 </form>
+
+<script>
+setTimeout(function(){window.location.reload()}, 5000);
+</script>

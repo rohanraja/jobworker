@@ -36,7 +36,7 @@ func ProcessResult(jresult *JobResult) {
 
 	Rate = float64(cnt) / elapsed.Seconds()
 
-	if cnt > 400 {
+	if elapsed.Seconds() > float64(15) {
 		cnt = 1
 		stTime = time.Now()
 		color.Blue("\nResetting Counter")
