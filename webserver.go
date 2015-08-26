@@ -53,5 +53,5 @@ func StartWebServer() {
 	http.HandleFunc("/", InfoHandler)
 	http.HandleFunc("/changenum", NumWorkersHandler)
 	// http.Handle("/websocket", websocket.Handler(WebsocketHandler))
-	Log.Fatal(http.ListenAndServe(":8080", nil))
+	Log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", Config.ListenPort), nil))
 }

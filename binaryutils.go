@@ -26,6 +26,10 @@ func GetOSPrefix() string {
 }
 func GetBinaryPath() string {
 
+	if Config.OS_Prefix == "win" {
+		return ""
+	}
+
 	return "./"
 }
 

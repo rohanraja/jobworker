@@ -79,3 +79,67 @@ func SetJobResult(binkey, jid, resultStr string) (val string) {
 	return
 
 }
+
+func FlushCompletedJobs(binkey string) {
+
+	key_done := "job:" + binkey + ":" + "done"
+
+	var keys []string
+
+	err := retry.Do(func() (err error) {
+		keys, err = Redis_dispatch.Client.SMembers(key_done).Result()
+		return
+
+	}, func() {
+		Redis_dispatch.InitClient()
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+	DeleteHash(binkey, "args", keys)
+	// DeleteHash(binkey, "results", keys)
+	DeleteFromPending(binkey, keys)
+
+	return
+
+}
+func DeleteFromPending(binkey string, jkey []string) {
+
+	key := "job:" + binkey + ":" + "pending"
+
+	err := retry.Do(func() (err error) {
+		_, err = Redis_dispatch.Client.SRem(key, jkey...).Result()
+		return
+
+	}, func() {
+		Redis_dispatch.InitClient()
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+	return
+
+}
+func DeleteHash(binkey, typeof string, jkey []string) {
+
+	key := "job:" + binkey + ":" + typeof
+
+	err := retry.Do(func() (err error) {
+		_, err = Redis_dispatch.Client.HDel(key, jkey...).Result()
+		return
+
+	}, func() {
+		Redis_dispatch.InitClient()
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+	return
+
+}

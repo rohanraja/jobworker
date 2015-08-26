@@ -74,6 +74,10 @@ func GetJobInfo(binkey, jid string) (val string) {
 
 	err := retry.Do(func() (err error) {
 		val, err = Redis_fetch.Client.HGet(key, jid).Result()
+		if err == redis.Nil {
+			err = nil
+			val = ""
+		}
 		return
 
 	}, func() {

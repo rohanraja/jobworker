@@ -13,6 +13,9 @@ func JobsFetcher(reqQueue chan JobRequest, resultQueue chan JobResult, signaler 
 
 		requests := FetchRequests(Config.Fetch_Binkey)
 		color.Yellow("\nGot %d new jobs", len(requests))
+		if len(requests) == 0 {
+			time.Sleep(15 * time.Second)
+		}
 
 		for _, r := range requests {
 			r.ResultsChannel = resultQueue

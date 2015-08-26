@@ -39,10 +39,10 @@ func ProcessResult(jresult *JobResult) {
 	if elapsed.Seconds() > float64(15) {
 		cnt = 1
 		stTime = time.Now()
-		color.Blue("\nResetting Counter")
+		// color.Blue("\nResetting Counter")
 	}
 
-	// color.Cyan("#%d - Rate: %f jobs/seconds\n", cnt, Rate)
+	color.Cyan("#%d - Rate: %f jobs/seconds\n", TotalDone, Rate)
 	if jresult.Status != 0 {
 		color.Red("Error: %s", jresult.ErrorMsg)
 	}
@@ -64,5 +64,7 @@ func DispatchMassResults(results [](*JobResult)) {
 
 		DispatchResult(results[i])
 	}
-	color.Green("\nDispatching Done\n")
+
+	FlushCompletedJobs(Config.Fetch_Binkey)
+	// color.Green("\nDispatching Done\n")
 }
