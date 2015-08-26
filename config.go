@@ -42,7 +42,7 @@ func init() {
 	Config.FetchPollDelay = 1 * time.Second
 	Config.Fetch_Binkey = "bookcrawl"
 	Config.NumFetches = 1000
-	Config.ListenPort = 8081
+	Config.ListenPort = 8082
 
 	Config.DispatchBufferSize = 500
 	ChangeRedisHost("127.0.0.1")
