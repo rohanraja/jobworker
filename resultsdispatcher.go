@@ -50,19 +50,19 @@ func ProcessResult(jresult *JobResult) {
 	resultsToDispatch = append(resultsToDispatch, jresult)
 
 	if len(resultsToDispatch) > Config.DispatchBufferSize {
-		DispatchMassResults(resultsToDispatch)
+		DispatchMassResults()
 		resultsToDispatch = [](*JobResult){}
 	}
 
 }
 
-func DispatchMassResults(results [](*JobResult)) {
+func DispatchMassResults() {
 
 	color.Red("\nDispatching Mass Results\n")
 
-	for i := 0; i < len(results); i++ {
+	for i := 0; i < len(resultsToDispatch); i++ {
 
-		DispatchResult(results[i])
+		DispatchResult(resultsToDispatch[i])
 	}
 
 	FlushCompletedJobs(Config.Fetch_Binkey)

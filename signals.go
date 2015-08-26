@@ -17,6 +17,7 @@ func HandleSignals() {
 
 			<-sigs
 			fmt.Println("\nQuitting..")
+			DispatchMassResults()
 			workForce.StopJobWorkers()
 			os.Exit(3)
 
