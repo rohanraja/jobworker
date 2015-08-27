@@ -42,7 +42,7 @@ func ProcessResult(jresult *JobResult) {
 		// color.Blue("\nResetting Counter")
 	}
 
-	color.Cyan("#%d - Rate: %f jobs/seconds\n", TotalDone, Rate)
+	// color.Cyan("#%d - Rate: %f jobs/seconds\n", TotalDone, Rate)
 	if jresult.Status != 0 {
 		color.Red("Error: %s", jresult.ErrorMsg)
 	}
@@ -58,7 +58,7 @@ func ProcessResult(jresult *JobResult) {
 
 func DispatchMassResults() {
 
-	color.Red("\nDispatching Mass Results\n")
+	// color.Red("\nDispatching Mass Results\n")
 
 	for i := 0; i < len(resultsToDispatch); i++ {
 

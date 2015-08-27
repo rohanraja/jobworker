@@ -98,10 +98,12 @@ func FlushCompletedJobs(binkey string) {
 		panic(err)
 	}
 
-	DeleteHash(binkey, "args", keys)
-	// DeleteHash(binkey, "results", keys)
-	DeleteFromPending(binkey, keys)
+	if len(keys) > 0 {
 
+		DeleteHash(binkey, "args", keys)
+		// DeleteHash(binkey, "results", keys)
+		DeleteFromPending(binkey, keys)
+	}
 	return
 
 }

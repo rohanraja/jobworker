@@ -6,7 +6,7 @@ import (
 	"github.com/rohan1020/jobworker"
 )
 
-func TestServing(t *testing.T) {
+func TesTServing(t *testing.T) {
 
 	jobworker.StartWebServer()
 }

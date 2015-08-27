@@ -3,8 +3,6 @@ package jobworker
 import (
 	"encoding/json"
 	"time"
-
-	"github.com/fatih/color"
 )
 
 func JobsFetcher(reqQueue chan JobRequest, resultQueue chan JobResult, signaler chan int) {
@@ -12,7 +10,8 @@ func JobsFetcher(reqQueue chan JobRequest, resultQueue chan JobResult, signaler 
 	for i := 0; i < 100; i++ {
 
 		requests := FetchRequests(Config.Fetch_Binkey)
-		color.Yellow("\nGot %d new jobs", len(requests))
+		Messages = append(Messages, "Got new jobs")
+		// color.Yellow("\nGot %d new jobs", len(requests))
 		if len(requests) == 0 {
 			time.Sleep(15 * time.Second)
 		}

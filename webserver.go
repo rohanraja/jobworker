@@ -9,13 +9,6 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-type Info struct {
-	JobRate    int
-	NumWorkers int
-	TotalDone  int
-	BinKey     string
-}
-
 func NumWorkersHandler(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
@@ -34,11 +27,10 @@ func NumWorkersHandler(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprintf(w, "Num Changed to %d", numInt)
 
 }
+
 func InfoHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("html/info.html")
-
-	j := Info{int(Rate), workForce.NumWorkers, TotalDone, Config.Fetch_Binkey}
-
+	j := GetInfoObj()
 	t.Execute(w, &j)
 }
 

@@ -2,7 +2,7 @@ package jobworker
 
 func Run() {
 
-	jobRequestQueue := make(chan JobRequest, 1000)
+	jobRequestQueue := make(chan JobRequest, Config.RequestQueueSize)
 	jobResultQueue := make(chan JobResult, Config.NumWorkers)
 
 	jobFetcherSignal := make(chan int)
@@ -17,6 +17,11 @@ func Run() {
 
 	HandleSignals()
 
-	StartWebServer()
+	go StartWebServer()
 
+	go PeriodicInfoUpdater()
+
+	RunTerminalUI()
+
+	GracefullQuit()
 }

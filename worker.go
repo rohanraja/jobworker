@@ -1,7 +1,5 @@
 package jobworker
 
-import "github.com/fatih/color"
-
 type WorkForce struct {
 	ExitSignalChannel chan int
 	NumWorkers        int
@@ -53,10 +51,10 @@ func (w *WorkForce) StopJobWorkers() {
 func ProcessQueue(queue chan JobRequest, exitSignaler chan int) {
 
 	defer func() {
-		color.Red("\nExiting JobWorker")
+		// color.Red("\nExiting JobWorker")
 	}()
 
-	color.Green("\nStarting Jobworker")
+	// color.Green("\nStarting Jobworker")
 
 	for {
 

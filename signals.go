@@ -5,6 +5,8 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/fatih/color"
 )
 
 func GracefullQuit() {
@@ -15,10 +17,25 @@ func GracefullQuit() {
 	os.Exit(0)
 }
 
+func DisplayInfo() {
+
+	color.Yellow("\n\n******* GO WORKER INFORMATION *******\n\n")
+
+	infoObj := GetInfoObj()
+
+	color.Green("%+v", infoObj)
+
+	color.Yellow("\n\n*************************************\n\n")
+
+}
+
 func HandleSignals() {
 	sigs := make(chan os.Signal, 1)
+	infosigs := make(chan os.Signal, 1)
 
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(infosigs, syscall.SIGTSTP)
+
 	go func() {
 
 		quitInProgress := false
@@ -31,6 +48,16 @@ func HandleSignals() {
 			}
 			go GracefullQuit()
 			quitInProgress = true
+
+		}
+
+	}()
+	go func() {
+
+		for {
+
+			<-infosigs
+			DisplayInfo()
 
 		}
 
