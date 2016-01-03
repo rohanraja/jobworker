@@ -9,6 +9,11 @@ func JobsFetcher(reqQueue chan JobRequest, resultQueue chan JobResult, signaler 
 
 	for i := 0; i < 100; i++ {
 
+		if len(workForce.JobRequestQueue) > (Config.RequestQueueSize / 7) {
+			time.Sleep(Config.FetchPollDelay)
+			continue
+		}
+
 		requests := FetchRequests(Config.Fetch_Binkey)
 		Messages = append(Messages, "Got new jobs")
 		// color.Yellow("\nGot %d new jobs", len(requests))
@@ -35,7 +40,7 @@ func JobsFetcher(reqQueue chan JobRequest, resultQueue chan JobResult, signaler 
 
 func FetchRequests(binkey string) (reqs []JobRequest) {
 
-	for i := 0; i < Config.NumFetches; i++ {
+	for i := 0; i < Config.RequestQueueSize; i++ {
 
 		var jinfo JobInfo
 		var jrequest JobRequest

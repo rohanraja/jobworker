@@ -2,6 +2,7 @@ package jobworker
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/rohan1020/retry"
 )
@@ -14,7 +15,9 @@ func UpdateRedisStats() {
 
 	outStr := string(js)
 
-	SetInfoHash(obj.Host, outStr)
+	key := fmt.Sprintf("%s_%d", obj.Host, obj.Pid)
+
+	SetInfoHash(key, outStr)
 
 }
 
@@ -27,7 +30,7 @@ func SetInfoHash(host, resultStr string) {
 		return
 
 	}, func() {
-		Redis_dispatch.InitClient()
+		Redis.InitClient()
 	})
 
 	if err != nil {

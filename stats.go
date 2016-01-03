@@ -14,6 +14,8 @@ type Info struct {
 	BinKey      string
 	Host        string
 	IpAddresses []string
+	Pid         int
+	TimeUpdate  time.Time
 }
 
 func PeriodicInfoUpdater() {
@@ -28,7 +30,8 @@ func PeriodicInfoUpdater() {
 func GetInfoObj() Info {
 
 	host, ips := GetNetworkStats()
-	j := Info{int(Rate), workForce.NumWorkers, TotalDone, Config.Fetch_Binkey, host, ips}
+	timenow := time.Now() //.MarshalJSON()
+	j := Info{int(Rate), workForce.NumWorkers, TotalDone, Config.Fetch_Binkey, host, ips, os.Getpid(), timenow}
 	return j
 }
 
