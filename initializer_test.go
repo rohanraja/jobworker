@@ -6,7 +6,7 @@ import (
 	"github.com/rohan1020/jobworker"
 )
 
-func TesTRunningMainLoop(t *testing.T) {
+func TestRunningMainLoop(t *testing.T) {
 
 	jobworker.Run()
 

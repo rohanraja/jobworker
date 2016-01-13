@@ -14,8 +14,9 @@ func JobsFetcher(reqQueue chan JobRequest, resultQueue chan JobResult, signaler 
 			continue
 		}
 
-		requests := FetchRequests(Config.Fetch_Binkey)
-		Messages = append(Messages, "Got new jobs")
+		// requests := FetchRequests(Config.Fetch_Binkey)
+		requests := FetchRequests_Mock()
+		// Messages = append(Messages, "Got new jobs")
 		// color.Yellow("\nGot %d new jobs", len(requests))
 		if len(requests) == 0 {
 			time.Sleep(15 * time.Second)
@@ -69,10 +70,15 @@ func FetchRequests_Mock() []JobRequest {
 	var jinfo JobInfo
 	var jrequest JobRequest
 
-	jinfo.BinaryKey = "parsebinary"
+	jinfo.BinaryKey = "a.out"
+	jinfo.Args = "/Users/rraja/code/cgt_distributed/examples/"
+	jinfo.Args = "mockCgtId"
+	jinfo.Jobid = "mockJobId"
+
 	jrequest.Jobinfo = jinfo
 
-	out := []JobRequest{jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest}
+	out := []JobRequest{jrequest, jrequest}
+	// out := []JobRequest{jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest, jrequest}
 
 	return out
 }

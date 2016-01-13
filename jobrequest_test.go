@@ -2,6 +2,7 @@ package jobworker_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/fatih/color"
 	"github.com/rohan1020/jobworker"
@@ -12,23 +13,42 @@ func initReq() jobworker.JobRequest {
 	var jinfo jobworker.JobInfo
 	var jrequest jobworker.JobRequest
 
-	jinfo.BinaryKey = "parsebinary"
+	jinfo.BinaryKey = "a.out"
+	jinfo.Args = "/Users/rraja/code/cgt_distributed/examples/"
 	jrequest.Jobinfo = jinfo
 
 	return jrequest
 }
 
-func TesTExecutingRequest(t *testing.T) {
+func TestExecutingRequest(t *testing.T) {
 
 	jrequest := initReq()
-	str, err := jrequest.Executor()
 
-	color.Green("%v", str)
-	color.Red("%v", err)
+	execu := func() {
+		str, err := jrequest.Executor()
 
-	if err != nil {
-		t.Error("Exoected Error")
+		color.Green("%v", str)
+		color.Red("%v", err)
+		if err != nil {
+			t.Error("Exoected Error")
+		}
 	}
+
+	go execu()
+
+	time.Sleep(5 * time.Second)
+
+	stat, _ := jrequest.GetStatus()
+
+	color.Green("\nStatus:\n%s", stat)
+
+	time.Sleep(5 * time.Second)
+
+	stat, _ = jrequest.GetStatus()
+
+	color.Green("\nStatus:\n%s", stat)
+
+	time.Sleep(25 * time.Second)
 
 }
 

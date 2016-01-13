@@ -11,6 +11,7 @@ type Info struct {
 	JobRate     int
 	NumWorkers  int
 	TotalDone   int
+	Progress    string
 	BinKey      string
 	Host        string
 	IpAddresses []string
@@ -31,7 +32,17 @@ func GetInfoObj() Info {
 
 	host, ips := GetNetworkStats()
 	timenow := time.Now() //.MarshalJSON()
-	j := Info{int(Rate), workForce.NumWorkers, TotalDone, Config.Fetch_Binkey, host, ips, os.Getpid(), timenow}
+	j := Info{
+		int(Rate),
+		workForce.NumWorkers,
+		TotalDone,
+		workForce.GetStatusAll(),
+		Config.Fetch_Binkey,
+		host,
+		ips,
+		os.Getpid(),
+		timenow}
+
 	return j
 }
 

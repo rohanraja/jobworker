@@ -13,6 +13,8 @@ func GracefullQuit() {
 
 	fmt.Println("\nQuitting Gracefully..")
 	DispatchMassResults()
+	workForce.JobRequestQueue = make(chan JobRequest)
+	workForce.ExitGracefullyAll()
 	workForce.StopJobWorkers()
 	os.Exit(0)
 }

@@ -78,10 +78,10 @@ func RunTerminalUI() {
 	list_msg := ui.NewList()
 	list_msg.ItemFgColor = ui.ColorYellow
 	list_msg.Border.Label = "Log"
-	list_msg.Height = 10
+	list_msg.Height = 20
 	list_msg.Y = 14
 	list_msg.X = 30
-	list_msg.Width = 25
+	list_msg.Width = 35
 
 	list := ui.NewList()
 	list.ItemFgColor = ui.ColorYellow
@@ -150,6 +150,14 @@ func RunTerminalUI() {
 			}
 			if e.Type == ui.EventKey && e.Ch == 'k' {
 				workForce.ChangeNumWorkers(workForce.NumWorkers + 1)
+			}
+			if e.Type == ui.EventKey && e.Ch == 's' {
+				funcc := func() {
+					statusStr := workForce.GetStatusAll()
+					Messages = append(Messages, statusStr)
+					draw(i)
+				}
+				go funcc()
 			}
 			if e.Type == ui.EventKey && e.Ch == 'q' {
 				return
