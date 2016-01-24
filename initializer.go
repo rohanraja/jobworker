@@ -8,10 +8,11 @@ func Run() {
 	jobFetcherSignal := make(chan int)
 	resultDispatcherSignal := make(chan int)
 
-	go JobsFetcher(jobRequestQueue, jobResultQueue, jobFetcherSignal)
-
-	workForce = NewWorkForce(jobRequestQueue)
+	workForce = NewWorkForce(jobRequestQueue, jobResultQueue)
 	workForce.StartWorking()
+	workForce.LoadActiveJobs()
+
+	go JobsFetcher(jobRequestQueue, jobResultQueue, jobFetcherSignal)
 
 	go ResultsDispatcher(jobResultQueue, resultDispatcherSignal)
 
@@ -21,6 +22,7 @@ func Run() {
 
 	go PeriodicInfoUpdater()
 
+	// time.Sleep(20 * time.Second)
 	RunTerminalUI()
 
 	GracefullQuit()

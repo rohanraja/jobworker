@@ -9,6 +9,14 @@ import (
 
 var Messages []string
 
+func LogMsg(msg string) {
+
+	if len(Messages) > 14 {
+		Messages = []string{}
+	}
+	Messages = append(Messages, msg)
+}
+
 func RunTerminalUI() {
 
 	err := ui.Init()
@@ -91,13 +99,11 @@ func RunTerminalUI() {
 	list.Width = 25
 
 	listItems := func() (out []string) {
-		inf := GetInfoObj()
-		out = append(out, fmt.Sprintf(" %d Jobs/Second", inf.JobRate))
+		out = append(out, fmt.Sprintf(" %d Jobs/Second", int(Rate)))
 		out = append(out, fmt.Sprintf(" %d  Workers", workForce.NumWorkers))
+		out = append(out, fmt.Sprintf(" %d  Active Jobs", len(workForce.ActiveJobs)))
 		out = append(out, fmt.Sprintf(" %d  Jobs Processed", TotalDone))
 		out = append(out, fmt.Sprintf(" %s  QueueBinary", Config.Fetch_Binkey))
-		out = append(out, fmt.Sprintf(" %s", inf.Host))
-		out = append(out, fmt.Sprintf(" %v", inf.IpAddresses))
 		return
 	}
 
@@ -114,7 +120,7 @@ func RunTerminalUI() {
 
 		list.Items = listItems()
 		list_msg.Items = Messages
-		gspeed.Percent = GetInfoObj().JobRate
+		gspeed.Percent = int(Rate) //GetInfoObj().JobRate
 		g.Percent = BufferPercent()
 		greq.Percent = int(100 * len(workForce.JobRequestQueue) / Config.RequestQueueSize)
 		// p.Text = fmt.Sprintf("%d Jobs/Second | %d Workers | %d Jobs Done", GetInfoObj().JobRate, workForce.NumWorkers, TotalDone)
@@ -153,9 +159,17 @@ func RunTerminalUI() {
 			}
 			if e.Type == ui.EventKey && e.Ch == 's' {
 				funcc := func() {
-					statusStr := workForce.GetStatusAll()
-					Messages = append(Messages, statusStr)
-					draw(i)
+					_ = workForce.GetStatusAll()
+					// allStrs := strings.Split(statusStr, "\n")
+					// color.Red("%+v", allStrs)
+					// for _, st := range allStrs {
+					// 	if st == "" {
+					// 		continue
+					// 	}
+					// 	LogMsg(st)
+					// }
+					// Messages = append(Messages, statusStr)
+					// draw(i)
 				}
 				go funcc()
 			}

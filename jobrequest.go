@@ -2,9 +2,9 @@ package jobworker
 
 type JobRequest struct {
 	Jobinfo        JobInfo
-	Result         JobResult
-	ResultsChannel chan JobResult
-	cgtJob         *CgtJob
+	Result         JobResult      `json:"-"`
+	ResultsChannel chan JobResult `json:"-"`
+	cgtJob         *CgtJob        `json:"-"`
 }
 
 func (r *JobRequest) ProcessRequest() {

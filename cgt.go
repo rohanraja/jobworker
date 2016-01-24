@@ -4,8 +4,10 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"syscall"
 	"time"
 
@@ -27,8 +29,13 @@ func ProcessCGTJob(job *JobRequest) (res string, err error) {
 
 	var cgtJob CgtJob
 	cgtJob.TrainingJobId = job.Jobinfo.Args
-	cgtJob.FolderPath = "cgtjobs/" + cgtJob.TrainingJobId
-	cgtJob.FolderPath = cgtJob.TrainingJobId
+	cgtPath, _ := filepath.Abs("./cgtjobs")
+
+	LogMsg("Processing " + cgtJob.TrainingJobId)
+
+	cgtJob.FolderPath = cgtPath + "/" + cgtJob.TrainingJobId
+	// cgtJob.FolderPath = "/Users/rraja/cgtjobs/" + cgtJob.TrainingJobId
+	// cgtJob.FolderPath = cgtJob.TrainingJobId
 	job.cgtJob = &cgtJob
 
 	cgtJob.DownloadJobFiles()
@@ -39,6 +46,34 @@ func ProcessCGTJob(job *JobRequest) (res string, err error) {
 }
 
 func (c *CgtJob) DownloadJobFiles() {
+
+	isExist, _ := FileExists(c.FolderPath)
+	if isExist == true {
+		return
+	}
+
+	isExist, _ = FileExists("./cgtjobs")
+	if isExist == false {
+		os.MkdirAll("./cgtjobs", 0755)
+	}
+
+	url := fmt.Sprintf("http://%s:8000/cgtjobs/%s.zip", Config.SERVER_IP, c.TrainingJobId)
+	fpath := fmt.Sprintf("%s.zip", c.FolderPath)
+	// color.Yellow("Downloading From %s", url)
+	// color.Yellow("Saving to %s", fpath)
+
+	err := downloadFile(fpath, url)
+	if err != nil {
+		color.Red("%v", err)
+		panic(err)
+	}
+
+	err = Unzip(fpath, c.FolderPath)
+	if err != nil {
+		color.Red("%v", err)
+		panic(err)
+	}
+
 }
 
 func (c *CgtJob) Execute() {
@@ -72,7 +107,8 @@ func (c *CgtJob) Execute() {
 
 	cmd.Wait()
 
-	color.Red("Finished Execution of CGT Job #%s", c.TrainingJobId)
+	LogMsg("Finished " + c.TrainingJobId)
+	// color.Red("Finished Execution of CGT Job #%s", c.TrainingJobId)
 
 }
 
@@ -92,8 +128,18 @@ func (c *CgtJob) GetStatus() (res string, err error) {
 		res = fmt.Sprintf("%v", err)
 	}
 
-	res = fmt.Sprintf("Accuracy: %s, Epoch: %s", lines[len(lines)-1], lines[len(lines)-2])
+	res = fmt.Sprintf("%s - Acc: %s, Epc: %s", c.TrainingJobId, lines[len(lines)-1], lines[len(lines)-2])
 
+	return
+}
+
+func (c *CgtJob) UpdateRedisStatus() (err error) {
+	status, _ := c.GetStatus()
+	params_path := c.FolderPath + "/params_out"
+	content, _ := ioutil.ReadFile(params_path)
+	SetInfoHash("job:cgt:status", c.TrainingJobId, status)
+	SetInfoHash("job:cgt:params", c.TrainingJobId, string(content))
+	// LogMsg(fmt.Sprintf("%s PUpdated", c.TrainingJobId))
 	return
 }
 
@@ -133,19 +179,4 @@ func (c *CgtJob) GetStatus_old() (res string, err error) {
 	res = string(out)
 
 	return
-}
-
-func readLines(path string) ([]string, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	var lines []string
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-	return lines, scanner.Err()
 }

@@ -1,6 +1,7 @@
 package jobworker
 
 import (
+	"encoding/json"
 	"fmt"
 	"net"
 	"os"
@@ -10,6 +11,7 @@ import (
 type Info struct {
 	JobRate     int
 	NumWorkers  int
+	NumWorking  int
 	TotalDone   int
 	Progress    string
 	BinKey      string
@@ -28,6 +30,23 @@ func PeriodicInfoUpdater() {
 
 }
 
+func UpdateRedisStats() {
+
+	obj := GetInfoObj()
+
+	if obj.BinKey == "a.out" {
+		workForce.UpdateStatusAll()
+	}
+
+	js, _ := json.Marshal(obj)
+
+	outStr := string(js)
+
+	key := fmt.Sprintf("%s_%d", obj.Host, obj.Pid)
+
+	SetInfoHash("job:workers", key, outStr)
+
+}
 func GetInfoObj() Info {
 
 	host, ips := GetNetworkStats()
@@ -35,6 +54,7 @@ func GetInfoObj() Info {
 	j := Info{
 		int(Rate),
 		workForce.NumWorkers,
+		len(workForce.ActiveJobs),
 		TotalDone,
 		workForce.GetStatusAll(),
 		Config.Fetch_Binkey,
